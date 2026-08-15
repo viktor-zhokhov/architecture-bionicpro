@@ -29,6 +29,28 @@ services:
       - "8080:8080"
     depends_on:
       - keycloak_db
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.8
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - ./clickhouse-data:/var/lib/clickhouse
+  reports-api:
+    build:
+      context: ./reports-api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KEYCLOAK_REALM: reports-realm
+      CLICKHOUSE_HOST: clickhouse
+      CLICKHOUSE_PORT: 9000
+      CORS_ORIGIN: http://localhost:3000
+    depends_on:
+      - keycloak
+      - clickhouse
   frontend:
     build:
       context: ./frontend
