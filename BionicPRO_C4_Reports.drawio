@@ -165,11 +165,16 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="rpt-e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Lhtp9tOnbV0N8Cz71-gY-17" target="rpt-clickhouse" edge="1">
-          <mxGeometry relative="1" as="geometry" />
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1550" y="840" />
+              <mxPoint x="1550" y="360" />
+            </Array>
+          </mxGeometry>
         </mxCell>
         <mxCell id="rpt-e4-label" value="Запрос готовых&lt;br&gt;отчётов [SQL/HTTP]" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="rpt-e4" vertex="1" connectable="0">
-          <mxGeometry x="0.3" relative="1" as="geometry">
-            <mxPoint x="50" as="offset" />
+          <mxGeometry x="0.15" relative="1" as="geometry">
+            <mxPoint x="15" as="offset" />
           </mxGeometry>
         </mxCell>
       </root>
