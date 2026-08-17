@@ -48,10 +48,6 @@ def extract_telemetry(**context):
 
 
 def load_customers_to_clickhouse(**context):
-    rows = context["ti"].xcom_pull(key="customers", task_ids="extract_crm_customers")
-    if not rows:
-        return
-
     ch = ClickHouseClient(host=CLICKHOUSE_HOST, port=CLICKHOUSE_PORT)
     ch.execute("CREATE DATABASE IF NOT EXISTS bionicpro")
     ch.execute(
@@ -67,6 +63,10 @@ def load_customers_to_clickhouse(**context):
         ORDER BY id
         """
     )
+
+    rows = context["ti"].xcom_pull(key="customers", task_ids="extract_crm_customers")
+    if not rows:
+        return
     ch.execute(
         "INSERT INTO bionicpro.customers VALUES",
         rows,
@@ -74,11 +74,8 @@ def load_customers_to_clickhouse(**context):
 
 
 def load_telemetry_to_clickhouse(**context):
-    rows = context["ti"].xcom_pull(key="telemetry", task_ids="extract_telemetry")
-    if not rows:
-        return
-
     ch = ClickHouseClient(host=CLICKHOUSE_HOST, port=CLICKHOUSE_PORT)
+    ch.execute("CREATE DATABASE IF NOT EXISTS bionicpro")
     ch.execute(
         """
         CREATE TABLE IF NOT EXISTS bionicpro.telemetry (
@@ -95,6 +92,10 @@ def load_telemetry_to_clickhouse(**context):
         ORDER BY (customer_id, recorded_at)
         """
     )
+
+    rows = context["ti"].xcom_pull(key="telemetry", task_ids="extract_telemetry")
+    if not rows:
+        return
     ch.execute(
         "INSERT INTO bionicpro.telemetry VALUES",
         rows,

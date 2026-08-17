@@ -77,10 +77,15 @@ def get_report(
     email = user.get("email")
 
     ch = get_clickhouse()
+    empty = {"user_id": user_id, "username": username, "report": []}
 
-    last_processed = ch.execute(
-        "SELECT max(report_date) FROM bionicpro.report_mart"
-    )
+    try:
+        last_processed = ch.execute(
+            "SELECT max(report_date) FROM bionicpro.report_mart"
+        )
+    except Exception:
+        return empty
+
     max_date = last_processed[0][0] if last_processed and last_processed[0][0] else None
 
     if report_date and max_date and report_date > max_date:
